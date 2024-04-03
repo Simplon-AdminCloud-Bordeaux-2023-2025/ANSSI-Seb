@@ -1,19 +1,19 @@
 ---
 
-# - name: "Update OS"
-#   hosts: appli
-#   roles:
-#     - role: "update"
-
-- name: "Installation openscap"
-  become: true
+- name: "Update OS"
   hosts: appli
   roles:
-    - role: openscap
-      tags: install
-  # roles:
-  #   - role: "openscap"
-  #       name: install openscap scanner
+    - role: "update"
+
+# - name: "Installation openscap"
+#   become: true
+#   hosts: appli
+#   roles:
+#     - role: openscap
+#       tags: install
+#   # roles:
+#   #   - role: "openscap"
+#   #       name: install openscap scanner
 
 # - name: "ANSSI-RECOM"
 #   hosts: appli
