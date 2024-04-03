@@ -1,0 +1,70 @@
+---
+
+# sudo oscap xccdf generate fix --profile xccdf_org.ssgproject.content_profile_anssi_bp28_intermediary 
+#--fix-type ansible /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml > playbook.yml
+
+# oscap xccdf generate fix --profile xccdf_org.ssgproject.content_profile_anssi_bp28_intermediary 
+#--fix-type ansible /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml > playbook.yml
+
+- name: install openscap scanner
+  package:
+    name: "{{ item }}"
+    state: latest
+  tags: install
+  with_items:
+  - openscap-scanner
+  - scap-security-guide
+
+- block:
+  - name: run openscap
+    tags: scan
+    command: oscap xccdf eval \
+      --profile {{ oscap_profile }} \
+      --results-arf /tmp/oscap-arf.xml \
+      --report /tmp/oscap-report.html \
+      /usr/share/xml/scap/ssg/content/{{ oscap_policy }}.xml
+
+  always:
+  - name: download report
+    tags: scan
+    fetch:
+      src: /tmp/oscap-report.html
+      dest: ../oscap-reports/{{ inventory_hostname }}.html
+      flat: yes
+
+# - name: "Add new users"
+#   become: true
+#   user:
+#     name: "{{item.name}}"
+#     shell: /bin/bash
+#     password: "{{tmp_password}}"
+#   with_items:
+#     - "{{users}}"
+
+# - name: "Add users to the sudoers"
+#   become: true
+#   copy:
+#     dest: "/etc/sudoers.d/{{item.name}}"
+#     content: "{{item.name}} ALL=(ALL) NOPASSWD:ALL"
+#   with_items:
+#     - "{{users}}"
+  
+# - name: "Deploy SSH Key"
+#   become: true
+#   authorized_key: 
+#     user: "{{item.sshkey}}"
+#     key: "{{ lookup('file', '../ssh_keys/{{item.sshkey}}.pub') }}"
+#     state: present
+#   with_items:
+#     - "{{users}}"
+
+# - name: "Disable Password Authentication"
+#   become: true
+#   lineinfile:
+#     dest: /etc/ssh/sshd_config
+#     regexp: '^PasswordAuthentication'
+#     line: "PasswordAuthentication no"
+#     state: present
+#     backup: true
+#   notify:
+#     - restart ssh

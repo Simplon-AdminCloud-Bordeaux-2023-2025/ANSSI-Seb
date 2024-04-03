@@ -1,0 +1,6 @@
+---
+roles:
+  - name: anssi-recom
+    src: https://github.com/Sebastienkusz/ANSSI-RECOM.git
+    version: main
+    scm: git

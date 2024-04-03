@@ -1,0 +1,36 @@
+---
+
+# - name: "Update OS"
+#   hosts: appli
+#   roles:
+#     - role: "update"
+
+- name: "Installation openscap"
+  become: true
+  hosts: appli
+  roles:
+    - role: openscap
+      tags: install
+  # roles:
+  #   - role: "openscap"
+  #       name: install openscap scanner
+
+# - name: "ANSSI-RECOM"
+#   hosts: appli
+#   roles:
+#     - role: "anssi-recom"
+
+# - name: "WikiJS db configuration"
+#   hosts: appli
+#   gather_facts: no
+#   tags: [ "mariadb", "mysql" ]
+#   roles:
+#     - role: "appli/mariadbconf"
+#   tasks:
+#     - debug: var=ansible_python_interpreter
+
+# - name: "WikiJS installation"
+#   hosts: appli
+#   tags: [ "wikijs" ]
+#   roles:
+#     - role: "appli/wikijs"
