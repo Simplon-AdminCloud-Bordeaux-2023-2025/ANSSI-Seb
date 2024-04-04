@@ -1,4 +1,4 @@
 ---
 
-- name: coucou
-  include_tasks: intermediary.yml
+- name: Include task list in play
+  include_tasks: minimal.yml      # minimal - intermediary

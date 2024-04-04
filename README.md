@@ -1,50 +1,91 @@
 # ANSSI-Seb
 
-sudo apt install python3.10-venv
-python3 -m venv .venv
+### 1- Installer l'environnement virtuel
 
-### 3- Lancement d'Ansible 
-dans un premier temps, il faut se déplacer dans le dossier **ansible** avant de lancer les commandes ci-dessous
->cd ansible
+se place dans le dossier Ansible pour créer l'environnement virtuel 
 
-Se placer dans un environnement virtuel pour installer **Ansible** et tous les modules si nécessaire
+    cd Ansible
 
-    virtualenv b1e3
-_________
-    source b1e3/bin/activate
+    sudo apt install python3.10-venv
 
-  #### *Si Ansible n'est pas installé :*
+    python3 -m venv .venv
 
-  Vérifier d'abord la version de python et
-  installer ensuite **Ansible** avec la commande ci-après :
+### 2- Entrer dans l'environnement virtuel
+
+    source .venv/bin/activate
+
+### 3- Installation d'Ansible  
 
     pip3 install ansible
+ou
 
-    python3 -m pip install --user ansible
-    
-Quand **Ansible** est installé, on lance les playbooks pour les configurations suivantes :
+    python3 -m pip install ansible
 
->Installation de la VM Bastion
+### 4- Chargement du rôle ANSSI-RECOM pour Ansible 
 
-    ansible-playbook install-appli.yml -i inventaire.ini
+    ansible-galaxy install -r requirements.yml --force -p roles/ 
 
-ansible-galaxy install -r requirements.yml --force -p roles/
+Vérifier le fichier main.yml dans le dossier /roles/anssi-recom/tasks et modifier la ligne suivant le niveau de criticité choisi   
 
-ansible -i inventaire.ini -m ping appli
+### 5- Déploiement via Terraform
+
+se déplacer dans le dossier Terraform
+
+__BACKEND__
+
+    cd ../Terraform/backend
+
+    terraform init
+
+    terraform apply
+
+__VM RedHat__
+
+    cd ../anssi
+
+    terraform init
+
+    terraform apply
+
+
+Terraform lance un playbook Ansible qui 
+   - met à jour les dépots de la VM, 
+   - installe OpenSCAP,
+   - corrige les vulnérabilités avec le rôle ANSSI-RECOM téléchargé précédemment 
+
+La connexion ssh est donnée par un output terraform
+
+
+### 6- Evaluation avec OpenSCAP
+
+se déplacer dans le dossier Ansible
+
+    cd ../../Ansible
+
+Pour faire une évaluation :
+
+__Il faut modifier la variable "oscap_level" dans le fichier run_scap.yml afin de choisir le niveau d'évaluation__
+
+    ansible-playbook run_scap.yml -i inventaire.ini
+
+Un rapport est généré dans le dossier /oscap-reports
+
+Suite ça, il est possible de créer un playbook avec toutes les vulnérabilités :
+
+__Il faut modifier la variable "oscap_level" dans le fichier remediation_create_playbook.yml afin de choisir le niveau d'évaluation__
+
+    ansible-playbook remediation_create_playbook.yml -i inventaire.ini
+
+Un playbook est généré dans le dossier /oscap-reports
 
 
 
+Pour info, quelques commandes 
 
-sudo yum -y install openscap-scanner
+- pour lister les profils sur la VM oscap
 
-sudo yum -y install scap-security-guide
+    oscap info "/usr/share/xml/scap/ssg/content/ssg-rhel8-xccdf.xml"
 
-oscap info "/usr/share/xml/scap/ssg/content/ssg-rhel8-xccdf.xml"
+- pour lancer un ping via Ansible
 
-oscap info --profile xccdf_org.ssgproject.content_profile_anssi_bp28_minimal /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
-
-oscap xccdf eval --profile PROFILE_ID --results-arf ARF_FILE --report REPORT_FILE SOURCE_DATA_STREAM_FILE
-
-oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_anssi_bp28_intermediary --results-arf results.xml --report report.html /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
-
-oscap xccdf remediate --results remediation-results.xml results.xml
+    ansible -i inventaire.ini -m ping appli

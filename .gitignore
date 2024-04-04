@@ -50,4 +50,6 @@ pyvenv.cfg
 *.zip
 
 /Ansible/.venv/
+/Ansible/roles/anssi-recom/
 /oscap-reports/
+inventaire.ini
