@@ -5,15 +5,11 @@
   roles:
     - role: "update"
 
-# - name: "Installation openscap"
-#   become: true
-#   hosts: appli
-#   roles:
-#     - role: openscap
-#       tags: install
-#   # roles:
-#   #   - role: "openscap"
-#   #       name: install openscap scanner
+- name: "Installation openscap"
+  become: true
+  hosts: appli
+  roles:
+    - role: openscap
 
 - name: "ANSSI-RECOM"
   hosts: appli

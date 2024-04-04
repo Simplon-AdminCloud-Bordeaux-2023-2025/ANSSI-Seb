@@ -49,4 +49,4 @@ pyvenv.cfg
 
 *.zip
 
-/Ansible/.venv/*
+/Ansible/.venv/
