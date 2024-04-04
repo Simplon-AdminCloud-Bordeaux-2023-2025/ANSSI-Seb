@@ -15,10 +15,10 @@
 #   #   - role: "openscap"
 #   #       name: install openscap scanner
 
-# - name: "ANSSI-RECOM"
-#   hosts: appli
-#   roles:
-#     - role: "anssi-recom"
+- name: "ANSSI-RECOM"
+  hosts: appli
+  roles:
+    - role: "anssi-recom"
 
 # - name: "WikiJS db configuration"
 #   hosts: appli

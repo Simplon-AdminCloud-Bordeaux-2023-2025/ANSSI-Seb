@@ -113,5 +113,5 @@ resource "azurerm_virtual_machine" "main" {
       key_data = var.ssh_key
     }
   }
-
+  
 }
