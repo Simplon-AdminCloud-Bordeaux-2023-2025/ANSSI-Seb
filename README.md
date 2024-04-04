@@ -19,6 +19,8 @@ _________
   installer ensuite **Ansible** avec la commande ci-après :
 
     pip3 install ansible
+
+    python3 -m pip install --user ansible
     
 Quand **Ansible** est installé, on lance les playbooks pour les configurations suivantes :
 

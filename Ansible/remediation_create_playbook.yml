@@ -1,0 +1,31 @@
+---
+
+- hosts: all
+
+  vars:
+    oscap_level: minimal  # minimal - intermediary - high - enhanced
+    oscap_profile: xccdf_org.ssgproject.content_profile_anssi_bp28_{{ oscap_level }}
+    oscap_policy: ssg-rhel8-ds
+
+  tasks:
+
+    - name: run openscap
+      become: true
+      command: sudo oscap xccdf generate fix \
+        --profile {{ oscap_profile }} \
+        --fix-type ansible /usr/share/xml/scap/ssg/content/{{ oscap_policy }}.xml
+      register: openscap_output
+
+
+    - name: copy the output to a local file
+      become: true
+      copy:
+        content: "{{ openscap_output.stdout }}"
+        dest: /tmp/playbook-{{ inventory_hostname }}-{{ oscap_level }}.yml
+
+    - name: download file
+      become: true
+      fetch:
+        src: /tmp/playbook-{{ inventory_hostname }}-{{ oscap_level }}.yml
+        dest: ../oscap-reports/playbook-{{ inventory_hostname }}-{{ oscap_level }}.yml
+        flat: yes

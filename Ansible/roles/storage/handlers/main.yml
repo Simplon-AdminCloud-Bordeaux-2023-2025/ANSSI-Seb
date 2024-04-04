@@ -1,8 +1,0 @@
----
-
-# handlers file for samba
-- name: restart samba
-  become: true
-  service:
-    name: smbd
-    state: restarted

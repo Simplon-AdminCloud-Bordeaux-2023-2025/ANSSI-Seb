@@ -1,4 +1,0 @@
----
-
-oscap_profile: xccdf_org.ssgproject.content_profile_anssi_bp28_intermediary
-oscap_policy: ssg-rhel8-ds
