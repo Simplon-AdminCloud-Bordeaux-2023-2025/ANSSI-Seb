@@ -3,7 +3,7 @@
 - hosts: all
 
   vars:
-    oscap_level: minimal  # minimal - intermediary - high - enhanced
+    oscap_level: intermediary  # minimal - intermediary - high - enhanced
     oscap_profile: xccdf_org.ssgproject.content_profile_anssi_bp28_{{ oscap_level }}
     oscap_policy: ssg-rhel8-ds
 

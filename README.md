@@ -21,11 +21,16 @@ ou
 
     python3 -m pip install ansible
 
+
+on peut vérifier la présence du module ansible avec la commande
+
+    pip list
+
 ### 4- Chargement du rôle ANSSI-RECOM pour Ansible 
 
     ansible-galaxy install -r requirements.yml --force -p roles/ 
 
-Vérifier le fichier main.yml dans le dossier /roles/anssi-recom/tasks et modifier la ligne suivant le niveau de criticité choisi   
+__Vérifier le fichier main.yml dans le dossier /roles/anssi-recom/tasks et modifier la ligne suivant le niveau de criticité choisi__  
 
 ### 5- Déploiement via Terraform
 
